@@ -53,6 +53,16 @@ For larger or design-heavy work, capture the plan before implementing:
 
 See [docs/README.md](docs/README.md) for the full plan lifecycle.
 
+
+## Verify before completing work
+
+Before marking any task done, pushing a branch, or opening a PR, run the `work-complete-verification` skill. It covers two things in order:
+
+1. **Technical gate** — `make preflight` (lint + format + all tests). Must pass clean. Failures are fixed using `lint-and-fix` or `test-and-fix` before proceeding.
+2. **Documentation review** — diff the branch against `main` and check: are architecture docs current? does the change warrant an ADR? are new public symbols documented? is deferred work tracked?
+
+`create-pr` runs `work-complete-verification` automatically as its first step. For all other work, invoke it explicitly before declaring done.
+
 ## Tests
 
 Three layers, each runnable independently:
