@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('selects a language and displays its dynamic greeting', async ({ page }) => {
+test('selects a language and displays its dynamic greeting', async ({
+  page,
+}) => {
   await page.goto('/');
 
   const selector = page.getByTestId('language-selector');

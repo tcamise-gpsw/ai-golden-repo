@@ -39,7 +39,7 @@ sequenceDiagram
     Backend-->>Frontend: Language collection
     Frontend->>Backend: GET /api/translate/{code}
     Backend->>Backend: Validate code against curated metadata
-    Backend->>MyMemory: Translate "Hello, World!" from en to code
+    Backend->>MyMemory: Translate the Hello World source phrase from en to code
     alt Valid upstream response
         MyMemory-->>Backend: translatedText
         Backend-->>Frontend: TranslatedGreeting

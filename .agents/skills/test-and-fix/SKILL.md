@@ -37,9 +37,11 @@ Never delete a test. This is a hard rule with no exceptions.
 
 Re-run the specific failing layer. Then run `make preflight` to confirm nothing else regressed.
 
-## 5. E2E-specific notes
+## 5. Runner-specific notes
 
-E2E tests require live services. Playwright auto-starts them through the `webServer` config in `playwright.config.ts`. In CI, set `CI=true` so services always start fresh. If services fail to start, check the command in `playwright.config.ts` and ensure backend dependencies are installed.
+**E2E services:** Playwright auto-starts live services through the `webServer` config in `playwright.config.ts`. Existing servers are reused outside GitHub Actions; `GITHUB_ACTIONS=true` forces clean startup in CI. Do not use generic `CI=true` for this distinction because coding harnesses may set it locally. If services fail to start, check that config and ensure backend dependencies are installed.
+
+**Test discovery:** Vitest and Playwright both recognize `.spec` filenames. If `make test-frontend` tries to execute a Playwright file and reports that `test()` was called unexpectedly, the runners are overlapping. Keep Vitest's `test.include` scoped to `frontend/tests/`; do not rename or weaken the Playwright test.
 
 ## Improving this skill
 

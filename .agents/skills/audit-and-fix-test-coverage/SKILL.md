@@ -37,20 +37,18 @@ make test-backend
 
 **Patterns to use:**
 ```python
-# Async test with ASGITransport — no live server needed
+# Async route test with ASGITransport — no live server needed
 @pytest.mark.asyncio
-async def test_example():
+async def test_get_languages():
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
-        response = await client.get("/api/greetings/english")
+        response = await client.get("/api/languages")
     assert response.status_code == 200
-    assert response.json()["language"] == "English"
 
-# Parametrize for case-insensitive and variant checks
-@pytest.mark.parametrize("lang", ["english", "English", "ENGLISH"])
-async def test_case_insensitive(lang):
-    ...
+# Exercise an external HTTP boundary without live network traffic
+translation_client = AsyncClient(transport=MockTransport(handler))
+monkeypatch.setattr(main.httpx, "AsyncClient", lambda **_: translation_client)
 ```
 
 **What not to test:**
@@ -73,26 +71,22 @@ make test-frontend
 
 **Patterns to use:**
 ```jsx
-// Render with mock data and assert output
-it('renders all greeting items', () => {
-  render(<GreetingList greetings={mockGreetings} />);
-  expect(screen.getAllByTestId('greeting-item')).toHaveLength(2);
+// Test controlled component behavior
+it('reports the selected language code', () => {
+  const onSelect = vi.fn();
+  render(
+    <LanguageSelector languages={languages} selected="en" onSelect={onSelect} />
+  );
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'ja' } });
+  expect(onSelect).toHaveBeenCalledWith('ja');
 });
 
-// Mock fetch for components that load data
-beforeEach(() => {
-  global.fetch = vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => mockGreetings,
-  });
-});
-
-// Test error state
-it('shows error on fetch failure', async () => {
-  global.fetch = vi.fn().mockResolvedValue({ ok: false });
-  render(<App />);
-  expect(await screen.findByRole('alert')).toBeInTheDocument();
-});
+// Mock sequential API requests at the App boundary
+const fetchMock = vi
+  .fn()
+  .mockResolvedValueOnce({ ok: true, json: async () => languages })
+  .mockResolvedValueOnce({ ok: true, json: async () => translatedGreeting });
+vi.stubGlobal('fetch', fetchMock);
 ```
 
 **What not to test:**
@@ -117,10 +111,10 @@ Use E2E when the behavior requires a real browser or real HTTP. Do not write E2E
 
 **Patterns to use:**
 ```typescript
-// Wait for data to load before asserting
-await expect(page.locator('[data-testid="greeting-item"]').first()).toBeVisible();
-const items = page.locator('[data-testid="greeting-item"]');
-await expect(items).toHaveCount(10);
+const selector = page.getByTestId('language-selector');
+await expect(selector).toBeVisible();
+await selector.selectOption('ja');
+await expect(page.getByTestId('greeting-display').locator('h1')).not.toHaveText('');
 ```
 
 ## 3. Fix gaps

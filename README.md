@@ -1,6 +1,6 @@
 # Hello World — Multilingual
 
-A simple React and FastAPI app that displays greetings in multiple languages.
+A React and FastAPI app that translates "Hello, World!" into a selected language.
 
 ### Prerequisites
 
@@ -11,29 +11,22 @@ A simple React and FastAPI app that displays greetings in multiple languages.
 
 ### Development
 
-Run the following commands in separate terminals:
+Install dependencies once, then start both hot-reloading services:
 
 ```bash
-# Terminal 1 — backend
-cd backend && pip install -e '.[dev]' && uvicorn app.main:app --reload
-
-# Terminal 2 — frontend
-cd frontend && npm install && npm run dev
+make install
+make dev
 ```
 
-App available at http://localhost:5173. API at http://localhost:8000/api/greetings.
+The app is available at http://localhost:5173. The generated API reference is available with `make openapi-preview`; application endpoints are `GET /api/languages` and `GET /api/translate/{code}`.
 
 ### Testing
 
 ```bash
-# Backend unit tests
-cd backend && pytest
-
-# Frontend unit tests
-cd frontend && npm test
-
-# E2E (requires both dev services running)
-cd frontend && npm run e2e
+make test-backend   # pytest
+make test-frontend  # Vitest
+make test-e2e       # Playwright; starts required services automatically
+make preflight      # lint, format, and every test layer
 ```
 
 ### Production

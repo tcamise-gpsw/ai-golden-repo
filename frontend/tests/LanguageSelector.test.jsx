@@ -10,20 +10,28 @@ const languages = [
 describe('LanguageSelector', () => {
   it('renders every language option', () => {
     render(
-      <LanguageSelector languages={languages} selected="en" onSelect={() => {}} />
+      <LanguageSelector
+        languages={languages}
+        selected="en"
+        onSelect={() => {}}
+      />
     );
 
     expect(screen.getByTestId('language-selector')).toHaveValue('en');
     expect(screen.getAllByRole('option')).toHaveLength(2);
-    expect(screen.getByRole('option', { name: 'Japanese — 日本語' })).toHaveValue(
-      'ja'
-    );
+    expect(
+      screen.getByRole('option', { name: 'Japanese — 日本語' })
+    ).toHaveValue('ja');
   });
 
   it('reports the selected language code', () => {
     const onSelect = vi.fn();
     render(
-      <LanguageSelector languages={languages} selected="en" onSelect={onSelect} />
+      <LanguageSelector
+        languages={languages}
+        selected="en"
+        onSelect={onSelect}
+      />
     );
 
     fireEvent.change(screen.getByTestId('language-selector'), {

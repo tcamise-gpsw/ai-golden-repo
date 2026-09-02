@@ -10,7 +10,7 @@ The application originally stored complete greeting translations in a static JSO
 
 ## Decision
 
-We will keep curated language metadata in `backend/data/languages.json` and fetch "Hello, World!" translations from the MyMemory Translation API on demand. The FastAPI backend owns the external integration and exposes stable application endpoints to the frontend. Upstream HTTP failures, timeouts, and malformed responses are returned as HTTP 502 errors.
+We will keep curated language metadata in `backend/data/languages.json` and fetch a "Hello World" translation from the MyMemory Translation API on demand. English is rendered locally because MyMemory rejects identical source and target language pairs. The FastAPI backend owns the external integration and exposes stable application endpoints to the frontend. Upstream HTTP failures, timeouts, embedded provider error statuses, and malformed responses are returned as HTTP 502 errors.
 
 ## Consequences
 

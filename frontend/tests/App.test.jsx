@@ -93,4 +93,18 @@ describe('App', () => {
     );
     expect(screen.getByTestId('language-selector')).toBeInTheDocument();
   });
+
+  it('shows a top-level error when languages cannot load', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: false, json: async () => ({}) })
+    );
+
+    render(<App />);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Unable to load languages.'
+    );
+    expect(screen.queryByTestId('language-selector')).not.toBeInTheDocument();
+  });
 });

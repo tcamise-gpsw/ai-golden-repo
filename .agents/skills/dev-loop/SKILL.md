@@ -37,11 +37,13 @@ If `frontend` is not running:
   "op": "start",
   "name": "frontend",
   "application": "npm",
-  "args": ["run", "dev"],
+  "args": ["run", "dev", "--", "--host", "0.0.0.0"],
   "cwd": "frontend/",
   "ready": { "log": "Local:.*http", "port": 5173 }
 }
 ```
+
+Bind Vite to `0.0.0.0`; on macOS, bare `localhost` can resolve only to IPv6 while the readiness probe checks `127.0.0.1`, producing a false timeout even though Vite is live.
 
 ## 2. Open and observe the app
 
@@ -78,10 +80,10 @@ After a fix, run the narrowest test layer that covers the changed behavior:
 ```sh
 make test-backend   # backend pytest suite
 make test-frontend  # frontend Vitest suite
-make test-e2e       # full-stack Playwright (requires both services running)
+make test-e2e       # full-stack Playwright; starts required services automatically
 ```
 
-Reserve `make test-e2e` for full-stack validation. Prefer `make test-backend` or `make test-frontend` for faster feedback on isolated changes.
+Reserve `make test-e2e` for full-stack validation. Playwright manages its own services and reuses live dev servers locally. Prefer `make test-backend` or `make test-frontend` for faster feedback on isolated changes.
 
 ## 7. Loop
 

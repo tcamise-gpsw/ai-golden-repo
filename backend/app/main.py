@@ -40,13 +40,18 @@ TRANSLATION_TIMEOUT_SECONDS = 5.0
 async def _fetch_translation(code: str, client: httpx.AsyncClient) -> str:
     response = await client.get(
         MYMEMORY_URL,
-        params={"q": "Hello, World!", "langpair": f"en|{code}"},
+        params={"q": "Hello world", "langpair": f"en|{code}"},
     )
     response.raise_for_status()
-    translated_text = response.json().get("responseData", {}).get("translatedText")
+    payload = response.json()
+    if str(payload.get("responseStatus")) != "200":
+        raise ValueError("translation provider reported an error")
+
+    translated_text = payload.get("responseData", {}).get("translatedText")
     if not isinstance(translated_text, str) or not translated_text.strip():
         raise ValueError("translation response did not contain translated text")
     return translated_text
+
 
 app = FastAPI(
     title="Hello World API",
@@ -74,13 +79,16 @@ async def translate_greeting(code: str) -> TranslatedGreeting:
     if language is None:
         raise HTTPException(status_code=404, detail="Language not found")
 
-    try:
-        async with httpx.AsyncClient(timeout=TRANSLATION_TIMEOUT_SECONDS) as client:
-            greeting = await _fetch_translation(code, client)
-    except (httpx.HTTPError, ValueError) as error:
-        raise HTTPException(
-            status_code=502, detail="Translation service unavailable"
-        ) from error
+    if code == "en":
+        greeting = "Hello, World!"
+    else:
+        try:
+            async with httpx.AsyncClient(timeout=TRANSLATION_TIMEOUT_SECONDS) as client:
+                greeting = await _fetch_translation(code, client)
+        except (httpx.HTTPError, ValueError) as error:
+            raise HTTPException(
+                status_code=502, detail="Translation service unavailable"
+            ) from error
 
     return TranslatedGreeting(**language.model_dump(), greeting=greeting)
 
