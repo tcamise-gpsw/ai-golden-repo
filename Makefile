@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: build dev dev-backend dev-frontend down help install openapi openapi-preview test test-backend test-e2e test-frontend up
+.PHONY: build dev dev-backend dev-frontend down help install openapi openapi-preview preflight prod test test-backend test-e2e test-frontend
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -58,7 +58,7 @@ test-e2e: ## Run Playwright E2E tests (requires dev services running)
 build: ## Build production Docker images
 	docker-compose build
 
-up: ## Start production stack via docker-compose
+prod: ## Start production stack via docker-compose
 	docker-compose up
 
 down: ## Stop production stack

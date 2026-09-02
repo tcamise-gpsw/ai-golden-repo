@@ -39,7 +39,8 @@ cd frontend && npm run e2e
 ### Production
 
 ```bash
-docker-compose up --build
+make build   # build Docker images
+make prod    # start the stack (Ctrl-C to stop, or make down)
 ```
 
 App at http://localhost:80.
