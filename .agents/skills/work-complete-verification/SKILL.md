@@ -5,7 +5,7 @@ description: Use before marking any work complete, before opening a PR, or whene
 
 # Work-complete verification
 
-Run this before declaring work done or opening a PR. It owns two concerns in order: the technical gate, then the documentation review.
+Run this before declaring work done or opening a PR. It owns three concerns in order: the technical gate, coverage audit, then documentation review.
 
 ## 1. Gate — make preflight
 
@@ -19,9 +19,15 @@ make preflight
 - Test failures → invoke `test-and-fix`
 - Re-run `make preflight` after fixes; repeat until clean
 
-Do not move to the documentation review while the gate is failing.
+Do not move to the coverage audit while the gate is failing.
 
-## 2. Documentation review
+## 2. Coverage audit
+
+Invoke `audit-test-coverage`. It diffs the branch, assesses whether the changed behavior is adequately tested across all three layers, and identifies gaps. Any missing valuable tests are written and verified before proceeding.
+
+Do not move to the documentation review while coverage gaps remain unaddressed.
+
+## 3. Documentation review
 
 Diff the branch against `main`:
 
@@ -44,10 +50,11 @@ Do not absorb content from `docs/plans/` — that is a separate, user-initiated 
 
 If any of these checks result in changes, commit them using `git-commit` before the verification is considered complete.
 
-## 3. Report
+## 4. Report
 
 Tell the user:
 - Gate: passed / what failed and how it was fixed
+- Coverage: what gaps existed, what was written, what was skipped and why
 - Docs: what was updated, what ADRs were written, what was flagged
 - Whether the branch is ready to proceed (PR or further work)
 
