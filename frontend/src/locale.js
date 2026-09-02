@@ -7,7 +7,9 @@
  */
 export function resolveLocale(browserLocale, availableCodes) {
   const normalized = browserLocale.replace('_', '-').toLowerCase();
-  const exact = availableCodes.find((code) => code.toLowerCase() === normalized);
+  const exact = availableCodes.find(
+    (code) => code.toLowerCase() === normalized
+  );
 
   if (exact) {
     return exact;

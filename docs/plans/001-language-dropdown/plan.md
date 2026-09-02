@@ -27,21 +27,21 @@
 - Codes are ISO 639-1 except Mandarin Chinese, which uses `zh-CN` (BCP 47) — MyMemory expects this form.
 
 **Checklist** *(executing agent: check these off in the file as you complete them)*:
-- [ ] `languages.json` created with all 10 languages and correct codes (`en`, `es`, `fr`, `de`, `ja`, `zh-CN`, `ar`, `pt`, `ru`, `ko`)
-- [ ] `greetings.json` deleted
-- [ ] `Language` model added with field descriptions
-- [ ] Data loaded at startup, path resolved relative to the module file
-- [ ] `GET /api/languages` returns the full list
-- [ ] Module docstring updated
+- [x] `languages.json` created with all 10 languages and correct codes (`en`, `es`, `fr`, `de`, `ja`, `zh-CN`, `ar`, `pt`, `ru`, `ko`)
+- [x] `greetings.json` deleted
+- [x] `Language` model added with field descriptions
+- [x] Data loaded at startup, path resolved relative to the module file
+- [x] `GET /api/languages` returns the full list
+- [x] Module docstring updated
 
 **Tests:**
-- [ ] Run `make test-backend`
-- [ ] Add/update tests covering: `/api/languages` returns 200, a list of 10, each item has `language`/`native_name`/`code`; verify at least one known code (e.g. `zh-CN`) is present
+- [x] Run `make test-backend`
+- [x] Add/update tests covering: `/api/languages` returns 200, a list of 10, each item has `language`/`native_name`/`code`; verify at least one known code (e.g. `zh-CN`) is present
 
 **Commit & document:**
-- [ ] Read `skill://commit`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
-- [ ] Append to `notes.md` under a `### Task 1` heading. Write `N/A` if nothing worth recording.
-- [ ] All above checked — call `todo done` to advance.
+- [x] Read `skill://commit`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Append to `notes.md` under a `### Task 1` heading. Write `N/A` if nothing worth recording.
+- [x] All above checked — call `todo done` to advance.
 
 ### Task 2: Backend — MyMemory translation and `GET /api/translate/{code}`
 
@@ -63,23 +63,23 @@
 - Use a bounded request timeout (e.g. 5s) so a hung upstream does not hang the endpoint.
 
 **Checklist** *(executing agent: check these off in the file as you complete them)*:
-- [ ] `TranslatedGreeting` model added with field descriptions
-- [ ] MyMemory base URL is a module-level constant
-- [ ] `GET /api/translate/{code}` returns translated greeting on success
-- [ ] Unknown code → 404 with the documented detail
-- [ ] Upstream failure/timeout/bad-payload → 502 with the documented detail
-- [ ] Request timeout is bounded
-- [ ] Old `/api/greetings` and `/api/greetings/{language}` routes removed
-- [ ] `httpx` confirmed in production `dependencies`
+- [x] `TranslatedGreeting` model added with field descriptions
+- [x] MyMemory base URL is a module-level constant
+- [x] `GET /api/translate/{code}` returns translated greeting on success
+- [x] Unknown code → 404 with the documented detail
+- [x] Upstream failure/timeout/bad-payload → 502 with the documented detail
+- [x] Request timeout is bounded
+- [x] Old `/api/greetings` and `/api/greetings/{language}` routes removed
+- [x] `httpx` confirmed in production `dependencies`
 
 **Tests:**
-- [ ] Run `make test-backend`
-- [ ] Add/update tests covering: successful translation (MyMemory mocked, assert 200 + full shape + greeting value); unknown code → 404; upstream error → 502; upstream timeout → 502; malformed payload → 502. Mock MyMemory — no live network calls in unit tests.
+- [x] Run `make test-backend`
+- [x] Add/update tests covering: successful translation (MyMemory mocked, assert 200 + full shape + greeting value); unknown code → 404; upstream error → 502; upstream timeout → 502; malformed payload → 502. Mock MyMemory — no live network calls in unit tests.
 
 **Commit & document:**
-- [ ] Read `skill://commit`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
-- [ ] Append to `notes.md` under a `### Task 2` heading. Write `N/A` if nothing worth recording.
-- [ ] All above checked — call `todo done` to advance.
+- [x] Read `skill://commit`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Append to `notes.md` under a `### Task 2` heading. Write `N/A` if nothing worth recording.
+- [x] All above checked — call `todo done` to advance.
 
 ### Task 3: Frontend — dropdown, greeting display, and locale-aware App
 
@@ -104,22 +104,22 @@
 - Error handling: a failed `/api/languages` fetch shows the existing top-level "Unable to load" message; a failed `/api/translate` shows the error state within `GreetingDisplay` without losing the dropdown.
 
 **Checklist** *(executing agent: check these off in the file as you complete them)*:
-- [ ] `LanguageSelector` renders options from props and fires `onSelect` with the code
-- [ ] `GreetingDisplay` renders greeting, language, native name; handles loading and error
-- [ ] `resolveLocale` implements exact → base → Chinese-variant → English fallback
-- [ ] `App` fetches languages, picks locale default, fetches translation, wires components
-- [ ] Dropdown change re-fetches translation and shows loading meanwhile
-- [ ] `GreetingList.jsx` and `GreetingList.test.jsx` deleted
-- [ ] All new components/functions carry JSDoc
+- [x] `LanguageSelector` renders options from props and fires `onSelect` with the code
+- [x] `GreetingDisplay` renders greeting, language, native name; handles loading and error
+- [x] `resolveLocale` implements exact → base → Chinese-variant → English fallback
+- [x] `App` fetches languages, picks locale default, fetches translation, wires components
+- [x] Dropdown change re-fetches translation and shows loading meanwhile
+- [x] `GreetingList.jsx` and `GreetingList.test.jsx` deleted
+- [x] All new components/functions carry JSDoc
 
 **Tests:**
-- [ ] Run `make test-frontend`
-- [ ] Add/update tests covering: `LanguageSelector` renders all options and fires `onSelect`; `GreetingDisplay` renders greeting/loading/error states; `resolveLocale` for `ja-JP`→`ja`, `zh-TW`→`zh-CN`, `en-US`→`en`, unknown→`en`; `App` selects locale default and renders translated greeting (fetch mocked for both endpoints)
+- [x] Run `make test-frontend`
+- [x] Add/update tests covering: `LanguageSelector` renders all options and fires `onSelect`; `GreetingDisplay` renders greeting/loading/error states; `resolveLocale` for `ja-JP`→`ja`, `zh-TW`→`zh-CN`, `en-US`→`en`, unknown→`en`; `App` selects locale default and renders translated greeting (fetch mocked for both endpoints)
 
 **Commit & document:**
-- [ ] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
-- [ ] Append to `notes.md` under a `### Task 3` heading. Write `N/A` if nothing worth recording.
-- [ ] All above checked — call `todo done` to advance.
+- [x] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Append to `notes.md` under a `### Task 3` heading. Write `N/A` if nothing worth recording.
+- [x] All above checked — call `todo done` to advance.
 
 ### Task 4: E2E tests and OpenAPI regeneration
 
@@ -136,18 +136,18 @@
 - `make openapi` must be run after Task 2 so the spec reflects `/api/languages` and `/api/translate/{code}` and no longer references the removed routes.
 
 **Checklist** *(executing agent: check these off in the file as you complete them)*:
-- [ ] E2E spec updated to the dropdown flow with correct `data-testid` selectors
-- [ ] E2E asserts 10 options, a default greeting, and a change on new selection
-- [ ] E2E avoids asserting exact translated text (structural assertions only)
-- [ ] `docs/specs/openapi.json` regenerated via `make openapi`; old routes absent, new routes present
+- [x] E2E spec updated to the dropdown flow with correct `data-testid` selectors
+- [x] E2E asserts 10 options, a default greeting, and a change on new selection
+- [x] E2E avoids asserting exact translated text (structural assertions only)
+- [x] `docs/specs/openapi.json` regenerated via `make openapi`; old routes absent, new routes present
 
 **Tests:**
-- [ ] Run `make test-e2e` (services auto-start; set `CI=true` to always start fresh)
+- [x] Run `make test-e2e` (services auto-start; set `CI=true` to always start fresh)
 
 **Commit & document:**
-- [ ] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
-- [ ] Append to `notes.md` under a `### Task 4` heading. Write `N/A` if nothing worth recording.
-- [ ] All above checked — call `todo done` to advance.
+- [x] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Append to `notes.md` under a `### Task 4` heading. Write `N/A` if nothing worth recording.
+- [x] All above checked — call `todo done` to advance.
 
 ### Task 5: ADR and living architecture docs
 
@@ -166,27 +166,27 @@
 - Architecture docs must follow `docs/README.md` conventions: no rot-prone counts, Mermaid diagrams, real markdown links, one source of truth (link to `docs/specs/openapi.json`, do not duplicate the schema).
 
 **Checklist** *(executing agent: check these off in the file as you complete them)*:
-- [ ] ADR-0001 written via `docs-create-adr`, status Accepted, using the template
-- [ ] ADR-0001 added to the `docs/adr/README.md` index
-- [ ] ADR cross-linked to `03-api.md` and back
-- [ ] `03-api.md` updated: new endpoints, MyMemory dependency, error responses, updated sequence diagram
-- [ ] `04-frontend.md` updated: new component tree, data flow, locale detection; no `GreetingList` references
+- [x] ADR-0001 written via `docs-create-adr`, status Accepted, using the template
+- [x] ADR-0001 added to the `docs/adr/README.md` index
+- [x] ADR cross-linked to `03-api.md` and back
+- [x] `03-api.md` updated: new endpoints, MyMemory dependency, error responses, updated sequence diagram
+- [x] `04-frontend.md` updated: new component tree, data flow, locale detection; no `GreetingList` references
 
 **Tests:**
-- [ ] N/A (documentation only) — verify all internal markdown links resolve
+- [x] N/A (documentation only) — verify all internal markdown links resolve
 
 **Commit & document:**
-- [ ] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
-- [ ] Append to `notes.md` under a `### Task 5` heading. Write `N/A` if nothing worth recording.
-- [ ] All above checked — call `todo done` to advance.
+- [x] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Append to `notes.md` under a `### Task 5` heading. Write `N/A` if nothing worth recording.
+- [x] All above checked — call `todo done` to advance.
 
 ### Task 6: Final Validation
 
 **Checks:**
-- [ ] Full gate passes: `make preflight` (lint + format + backend + frontend + E2E) exits clean
-- [ ] Code quality clean: `make lint` and `make format` pass (fix via `make lint-fix` / `make format-fix` if needed)
-- [ ] All acceptance criteria from Tasks 1–5 verified end-to-end
-- [ ] `docs/specs/openapi.json` matches the implemented routes (no stale `/api/greetings`)
-- [ ] All internal markdown links in changed docs resolve
-- [ ] No regressions: the old greeting endpoints and `GreetingList` are fully removed with no dangling references
-- [ ] All above checked — call `todo done` to close.
+- [x] Full gate passes: `make preflight` (lint + format + backend + frontend + E2E) exits clean
+- [x] Code quality clean: `make lint` and `make format` pass (fix via `make lint-fix` / `make format-fix` if needed)
+- [x] All acceptance criteria from Tasks 1–5 verified end-to-end
+- [x] `docs/specs/openapi.json` matches the implemented routes (no stale `/api/greetings`)
+- [x] All internal markdown links in changed docs resolve
+- [x] No regressions: the old greeting endpoints and `GreetingList` are fully removed with no dangling references
+- [x] All above checked — call `todo done` to close.

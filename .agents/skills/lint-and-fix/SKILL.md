@@ -41,7 +41,7 @@ make format
 For anything still failing:
 
 - **Lint:** Use the reported rule and location to fix the source. Do not add suppression comments without explicit user approval.
-- **Format:** Ruff format and Prettier are fully automatic. If formatting still fails after `make format-fix`, the file may have a syntax error preventing parsing; fix the syntax first.
+- **Format:** Ruff format and Prettier are fully automatic. If formatting still fails after `make format-fix`, first determine whether the file is source or generated output. Exclude generated directories (for example `test-results/`, `playwright-report/`, or `dist/`) in `.prettierignore`; formatting them is temporary because their producer will overwrite them. For source files, a persistent failure usually means a syntax error prevents parsing — fix the syntax first.
 
 ## 4. Verify
 

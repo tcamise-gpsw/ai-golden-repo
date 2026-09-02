@@ -66,7 +66,7 @@ test-backend: ## Run backend pytest suite
 test-frontend: ## Run frontend Vitest suite
 	cd frontend && npm test
 
-test-e2e: ## Run Playwright E2E tests (services auto-started; set CI=true to always start fresh)
+test-e2e: ## Run Playwright E2E tests (services auto-started or reused locally)
 	cd frontend && npm run e2e
 
 preflight: ## Run lint, format, and all tests — used by CI

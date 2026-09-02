@@ -1,6 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 const baseURL = 'http://localhost:5173';
+const reuseExistingServer = process.env.GITHUB_ACTIONS !== 'true';
 
 export default defineConfig({
   testDir: './e2e',
@@ -10,17 +11,15 @@ export default defineConfig({
   },
   webServer: [
     {
-      // Start the FastAPI backend before the suite runs.
-      // reuseExistingServer: reuse a running dev server locally; always start fresh in CI.
       command:
         'cd ../backend && uvicorn app.main:app --host 0.0.0.0 --port 8000',
       port: 8000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer,
     },
     {
       command: 'npm run dev',
       port: 5173,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer,
     },
   ],
 });
