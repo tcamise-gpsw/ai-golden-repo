@@ -61,6 +61,12 @@ Inspect the service that owns the symptom:
 { "op": "logs", "name": "frontend" }
 ```
 
+**Log levels to watch for:**
+- `INFO` — the default operational stream; start here to understand what the app is doing
+- `WARNING` — something unexpected happened but the request continued; always investigate
+- `ERROR` — operation failed; trace the cause before editing
+- `DEBUG` / `VERBOSE` — detailed implementation trace; only enable when INFO and WARNING give insufficient context
+
 To isolate reload output from startup noise, call logs with `"follow": true` and the `cursor` returned by the prior call.
 
 ## 4. Edit and hot-reload

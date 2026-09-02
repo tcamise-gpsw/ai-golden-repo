@@ -60,9 +60,21 @@ Before marking any task done, pushing a branch, or opening a PR, run the `work-c
 
 1. **Technical gate** — `make preflight` (lint + format + all tests). Must pass clean. Failures are fixed using `lint-and-fix` or `test-and-fix` before proceeding.
 2. **Coverage audit** — `audit-and-fix-test-coverage` checks changed behavior, adds missing valuable tests, and verifies them.
-3. **Documentation review** — diff the branch against `main` and check: are architecture docs current? does the change warrant an ADR? are new public symbols documented? is deferred work tracked?
+3. **Logging audit** — `audit-and-fix-logging` checks that new and changed code carries appropriate logging, adds what is missing, and verifies nothing broke.
+4. **Documentation review** — diff the branch against `main` and check: are architecture docs current? does the change warrant an ADR? are new public symbols documented? is deferred work tracked?
 
 `create-pr` runs `work-complete-verification` automatically as its first step. For all other work, invoke it explicitly before declaring done.
+
+## Issue tracking
+
+Use GitHub Issues to track bugs found but not fixed in the current task, work deferred from a PR, and scope that exceeds the current task boundary. Use the `create-github-issue` skill, which defines the label taxonomy and templates.
+
+Create an issue when:
+- A bug is discovered whose fix falls outside the current task scope
+- A PR's "GitHub Issues" section surfaces follow-up work
+- Scope creep is identified and explicitly deferred
+
+Never create issues without user authorization unless the user has already authorized it (e.g. via the PR template checklist).
 
 ## Tests
 
@@ -123,6 +135,24 @@ make format-fix  # auto-fix formatting
 **Frontend (JS/JSX):** [ESLint](https://eslint.org/) for lint rules, [Prettier](https://prettier.io/) for formatting. Configuration in `frontend/eslint.config.js` and `frontend/.prettierrc.json`.
 
 If a fix target cannot resolve an issue automatically, fix it manually. Do not suppress or disable rules without explicit user approval.
+
+## Logging
+
+Logging is a first-class design concern and must be incorporated from the start, not added as an afterthought. Use the `audit-and-fix-logging` skill to verify that new and changed code carries appropriate logging before marking work complete.
+
+**Levels** (ascending verbosity — use the narrowest level that fits):
+
+| Level | When to use |
+|---|---|
+| `error` | Unrecoverable failure; the operation cannot proceed |
+| `warning` | Recoverable unexpected condition; the operation proceeds but something is wrong |
+| `info` | **Default.** High-level operational events: service start, request received, key state transitions |
+| `debug` | Implementation detail useful during development and investigation |
+| `verbose` | Finer-grained than debug; rarely enabled; use for tight loops or very high-frequency events |
+
+**Backend (Python):** Use the standard `logging` module. Each module gets its own logger via `logging.getLogger(__name__)`. `INFO` is the default level. A custom `VERBOSE` level (below `DEBUG`) is registered at application startup. Do not use `print` for operational output.
+
+**Frontend (JavaScript):** Use the native console API. `console.log` maps to info/debug; `console.warn` maps to warning; `console.error` maps to error. No library required. Do not leave development-only `console.log` calls in production code.
 
 ## Code comments
 
