@@ -28,8 +28,6 @@ Do **not** write ADRs for reversible or cosmetic choices, or for anything a shor
 
 | ADR | Title | Status |
 |---|---|---|
-| [ADR-0001](0001-json-data-source.md) | Greeting data is stored in a static JSON file | Accepted |
-| [ADR-0002](0002-layered-test-strategy.md) | Three-layer test strategy: pytest, Vitest, Playwright | Accepted |
 
 ## Template
 

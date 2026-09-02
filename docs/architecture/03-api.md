@@ -77,8 +77,3 @@ the documented `404`.
 Run `make openapi` from the repository root after changing the FastAPI routes or
 the Greeting model. The command in [Makefile](../../Makefile) regenerates
 [`docs/specs/openapi.json`](../specs/openapi.json); do not hand-edit the generated file.
-
-## Related decision
-
-[ADR-0001: Static JSON data source](../adr/0001-json-data-source.md) records
-the choice that makes the API's startup-loaded greeting collection possible.

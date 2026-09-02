@@ -78,11 +78,3 @@ a database.
 Both proxy paths carry the REST contract documented in
 [03 API](03-api.md). That document is the next level of detail for frontend-to-
 backend requests and responses.
-
-## Related decisions
-
-- [ADR-0001: Static JSON data source](../adr/0001-json-data-source.md) records
-  why greeting data is stored in a file and loaded into memory.
-- [ADR-0002: Layered test strategy](../adr/0002-layered-test-strategy.md)
-  records the test entry points associated with the frontend and backend
-  boundaries.
