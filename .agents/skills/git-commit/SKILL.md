@@ -52,6 +52,15 @@ git commit -F /tmp/commit-msg.txt
 
 If staged changes span unrelated concerns, split into separate commits. A commit should represent one coherent intent.
 
-## Improving this skill
+## Keeping .gitmessage and this skill current
 
-If you encounter a scope that doesn't fit the list, surface it and propose adding it to both `.gitmessage` and this skill. Ask before applying.
+`.gitmessage` is the source of truth for types and scopes. This skill reflects it. When either falls short, propose an update — but never apply one without the user's approval.
+
+**Missing scope.** If the change doesn't fit any listed scope, do not invent one silently or omit the scope to avoid the problem. Instead:
+1. Commit with the closest existing scope and note the mismatch.
+2. Propose the new scope: show the exact line to add to `.gitmessage` and the corresponding update to the scope list in this skill.
+3. Ask: "Should I add `<scope>` to `.gitmessage` and the commit skill?"
+
+**Missing or wrong type.** Same process — propose the addition or correction to both `.gitmessage` and this skill, ask before applying.
+
+**Anything else in this skill that led you wrong** — a rule that doesn't apply, a step that's missing, a better approach — resolve it, describe the gap, propose a specific edit to this file, and ask for approval.
