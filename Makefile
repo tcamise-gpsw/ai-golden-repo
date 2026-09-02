@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: build dev dev-backend dev-frontend down help install lint lint-fix openapi openapi-preview preflight prod test test-backend test-e2e test-frontend
+.PHONY: build dev dev-backend dev-frontend down format format-fix help install lint lint-fix openapi openapi-preview preflight prod test test-backend test-e2e test-frontend
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -21,13 +21,21 @@ openapi: ## Regenerate docs/specs/openapi.json from FastAPI route definitions
 	  "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" \
 	  > ../docs/specs/openapi.json
 
-lint: ## Check linting and formatting (no changes written)
-	cd backend && ruff check . && ruff format --check .
-	cd frontend && npm run lint
+lint: ## Check for lint errors (no changes written)
+	cd backend && ruff check .
+	cd frontend && node_modules/.bin/eslint .
 
-lint-fix: ## Auto-fix lint and formatting issues
-	cd backend && ruff check --fix . && ruff format .
-	cd frontend && npm run lint:fix
+lint-fix: ## Auto-fix lint errors
+	cd backend && ruff check --fix .
+	cd frontend && node_modules/.bin/eslint . --fix
+
+format: ## Check formatting (no changes written)
+	cd backend && ruff format --check .
+	cd frontend && node_modules/.bin/prettier --check .
+
+format-fix: ## Auto-fix formatting
+	cd backend && ruff format .
+	cd frontend && node_modules/.bin/prettier --write .
 
 openapi-preview: ## Preview docs/specs/openapi.json with Redoc in browser (no backend required)
 	npx @redocly/cli preview-docs docs/specs/openapi.json
@@ -61,7 +69,9 @@ test-frontend: ## Run frontend Vitest suite
 test-e2e: ## Run Playwright E2E tests (services auto-started; set CI=true to always start fresh)
 	cd frontend && npm run e2e
 
-preflight: ## Run all tests — unit and E2E (used by CI)
+preflight: ## Run lint, format, and all tests — used by CI
+	$(MAKE) lint
+	$(MAKE) format
 	$(MAKE) test-backend
 	$(MAKE) test-frontend
 	$(MAKE) test-e2e

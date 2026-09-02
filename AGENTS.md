@@ -96,18 +96,22 @@ Never delete a test without explicit permission from the user. If a test appears
 
 ## Linting and formatting
 
-All code must pass lint and format checks before committing. Run the check-only target to see issues without changing files, or the fix target to apply automatic corrections:
+All code must pass lint and format checks before committing. Lint and format are separate concerns with separate targets:
 
 ```sh
-make lint        # check — no changes written
-make lint-fix    # auto-fix what can be fixed
+make lint        # lint check — no changes written
+make lint-fix    # auto-fix lint errors
+make format      # format check — no changes written
+make format-fix  # auto-fix formatting
 ```
 
-**Backend (Python):** [Ruff](https://docs.astral.sh/ruff/) handles both linting and formatting. Configuration lives in `backend/pyproject.toml` under `[tool.ruff]`.
+`make preflight` runs both checks (plus all tests) and is the canonical gate before opening a PR.
 
-**Frontend (JS/JSX):** [ESLint](https://eslint.org/) for lint rules, [Prettier](https://prettier.io/) for formatting. Configuration lives in `frontend/eslint.config.js` and `frontend/.prettierrc.json`.
+**Backend (Python):** [Ruff](https://docs.astral.sh/ruff/) for lint (`ruff check`) and format (`ruff format`). Configuration in `backend/pyproject.toml` under `[tool.ruff]`.
 
-Run `make lint` before committing. If `make lint-fix` cannot resolve an issue automatically, fix it manually — do not suppress or disable rules without explicit user approval.
+**Frontend (JS/JSX):** [ESLint](https://eslint.org/) for lint rules, [Prettier](https://prettier.io/) for formatting. Configuration in `frontend/eslint.config.js` and `frontend/.prettierrc.json`.
+
+If a fix target cannot resolve an issue automatically, fix it manually. Do not suppress or disable rules without explicit user approval.
 
 ## Code comments
 
