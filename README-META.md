@@ -59,11 +59,13 @@ Three independent test layers — backend unit (pytest + httpx), frontend unit (
 
 A GitHub Actions workflow runs `make preflight` on every pull request.
 
-### Doc-as-code
+### Doc-as-code and Assisted Maintenance
 
 `docs/` follows the living-vs-historical convention: `docs/architecture/` and `docs/adr/` stay in sync with the code; `docs/plans/` is append-only historical record. The `docs/README.md` defines what goes where and the conventions for prose, diagrams, and links.
 
 `docs/specs/openapi.json` is generated from FastAPI route definitions and Pydantic models via `make openapi` — the API spec is always derived from code, never hand-maintained.
+
+Skills exist to maintain the docs: `docs-refresh` sweeps the repo for inaccuracies, gaps, and useless content; `docs-absorb-plan` folds a shipped plan's durable content into living docs; `docs-create-adr` creates a new ADR and updates the index.
 
 ### Structured PR workflow
 
@@ -80,78 +82,77 @@ Beyond workflows, `AGENTS.md` records the conventions an agent must follow:
 
 ## Workflow diagrams
 
-### Normal work
+Node labels are prefixed to show who or what is acting:
+`human::` — requires a person · `skill::` — agent invokes a named skill · `ai::` — agent acts with general capabilities
 
-Edit source, run the narrowest test layer, commit. Lint and test repair skills handle failures without breaking the flow.
+### Normal work
 
 ```mermaid
 flowchart LR
-    Edit["Edit source"] --> Test["make test-backend\nor test-frontend"]
-    Test -->|pass| Commit["git-commit"]
-    Test -->|fail| TestFix["test-and-fix"]
-    TestFix --> Test
-    Commit -->|lint fails| LintFix["lint-and-fix"]
-    LintFix --> Commit
+    A["human:: change intent"] --> B["ai:: edit source"]
+    B --> C["ai:: make test-backend\nor test-frontend"]
+    C -->|fail| D["skill:: test-and-fix"]
+    D --> C
+    C -->|pass| E["skill:: git-commit"]
+    E -->|lint fail| F["skill:: lint-and-fix"]
+    F --> E
+    E -->|clean| G["ai:: push"]
 ```
 
 ### Full dev loop
 
-Used when live behavior must be observed — a rendering issue, a bug only visible in the browser, or a hot-reload edge case.
-
 ```mermaid
 flowchart TD
-    Start["dev-loop skill"] --> Services["Start services\nhub: backend + frontend"]
-    Services --> Observe["Observe in browser"]
-    Observe --> Logs["Tail logs by level\nINFO → WARNING → ERROR → DEBUG"]
-    Logs --> Edit["Edit source"]
-    Edit --> Reload["Hot reload\nuvicorn --reload / Vite HMR"]
-    Reload --> Verify["Verify in browser"]
-    Verify -->|resolved| Tests["Targeted tests\nmake test-backend / test-frontend"]
-    Verify -->|not resolved| Logs
-    Tests --> Commit["git-commit"]
+    A["human:: report issue\nor ask for change"] --> B["skill:: dev-loop"]
+    B --> C["ai:: start services\nvia hub"]
+    C --> D["ai:: observe in browser"]
+    D --> E["ai:: tail logs\nINFO first, DEBUG if needed"]
+    E --> F["ai:: edit source"]
+    F --> G["ai:: hot reload\nconfirm in logs"]
+    G --> H["ai:: verify in browser"]
+    H -->|resolved| I["ai:: make test-backend\nor test-frontend"]
+    H -->|not resolved| E
+    I --> J["skill:: git-commit"]
 ```
 
 ### Verify before completing work
 
-Four steps run in order. Each must be clean before the next begins.
-
 ```mermaid
 flowchart TD
-    WCV["work-complete-verification"] --> Gate["make preflight\nlint · format · all tests"]
-    Gate -->|fail| Repair["lint-and-fix\ntest-and-fix"]
-    Repair --> Gate
-    Gate -->|pass| Coverage["audit-and-fix-test-coverage\ncheck coverage · add missing tests"]
-    Coverage --> Logging["audit-and-fix-logging\ncheck levels · add missing logs"]
-    Logging --> Docs["Documentation review\narchitecture · ADR · docstrings · issues"]
-    Docs -->|changes| Commit["git-commit"]
-    Docs -->|clean| Ready["Branch ready"]
-    Commit --> Ready
+    A["human:: mark work done\nor open PR"] --> B["skill:: work-complete-verification"]
+    B --> C["ai:: make preflight"]
+    C -->|fail| D["skill:: lint-and-fix\nskill:: test-and-fix"]
+    D --> C
+    C -->|pass| E["skill:: audit-and-fix-test-coverage"]
+    E --> F["skill:: audit-and-fix-logging"]
+    F --> G["ai:: documentation review"]
+    G -->|gaps| H["skill:: git-commit\nfixes and additions"]
+    H --> I["ai:: branch ready"]
+    G -->|clean| I
 ```
 
 ### Create a pull request
 
-Verification runs first. The PR is opened only when the branch is fully clean.
-
 ```mermaid
 flowchart TD
-    CreatePR["create-pr"] --> WCV["work-complete-verification\n(see above)"]
-    WCV --> Template["Fill PR template\nsummary · changes · testing · docs"]
-    Template --> Push["git push"]
-    Push --> GH["gh pr create --draft"]
+    A["human:: create PR"] --> B["skill:: create-pr"]
+    B --> C["skill:: work-complete-verification"]
+    C -->|clean| D["ai:: fill PR template"]
+    D --> E["ai:: git push"]
+    E --> F["ai:: gh pr create --draft"]
+    F --> G["human:: review and merge"]
 ```
 
 ### Plan lifecycle
 
-Plans capture design before implementation. Once the work ships, durable content moves into living docs.
-
 ```mermaid
 flowchart LR
-    Design["docs/plans/NNN/\ndesign.md + plan.md + notes.md"] --> Implement["Implement\nagainst the plan"]
-    Implement --> Verify["work-complete-verification"]
-    Verify --> PR["create-pr"]
-    PR -->|merged| Absorb["docs-absorb-plan"]
-    Absorb --> Arch["docs/architecture/\nupdated"]
-    Absorb --> ADR["docs/adr/\nnew ADRs"]
+    A["human:: write design\nand plan"] --> B["ai:: implement\nagainst the plan"]
+    B --> C["skill:: work-complete-verification"]
+    C --> D["skill:: create-pr"]
+    D --> E["human:: review\nand merge"]
+    E --> F["skill:: docs-absorb-plan"]
+    F --> G["ai:: architecture docs\nand ADRs updated"]
 ```
 
 ## Who This Is For
