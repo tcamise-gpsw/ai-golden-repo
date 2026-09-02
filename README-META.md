@@ -13,6 +13,26 @@ Use this repo as a template and a conversation starter: fork it, adapt the tooli
 
 AI infrastructure is the set of files, conventions, and workflows that make a codebase legible and actionable to an AI agent — regardless of which AI tool or harness your team uses.
 
+### Where AI is actively aiding
+
+This repo treats the following engineering concerns as first-class participants in AI-assisted development. Each has defined conventions, tooling, and skills that let an agent act on it with the same discipline a senior engineer would.
+
+**Documentation** — living architecture docs, Architecture Decision Records, and a plan lifecycle that moves from design through implementation to absorption into canonical docs. AI keeps docs in sync with code, not as an afterthought.
+
+**Testing** — a three-layer strategy (unit, component, end-to-end) with explicit definitions of what makes a test valuable. AI audits coverage on every branch, writes missing tests, and never deletes existing ones without authorization.
+
+**Logging** — a first-class design concern, not something added when debugging starts. AI audits new and changed code for appropriate log levels and adds what is missing before a PR is opened.
+
+**Code quality** — lint and format checks run as a hard gate before every commit and PR. AI fixes violations automatically where possible and flags what requires human judgment.
+
+**Development workflow** — the live dev loop (start services, observe, edit, verify in browser, run targeted tests) is a documented skill, not improvised. AI follows it consistently and updates it when it encounters gaps.
+
+**Version control** — commits follow Conventional Commits; PRs follow a structured template with mandatory sections. AI fills both correctly and proposes `.gitmessage` updates when a new scope is needed.
+
+**Issue tracking** — GitHub Issues are used deliberately: bugs found but not fixed, deferred work from PRs, and scope overflow. AI creates them with the right template and label, and only when authorized.
+
+### How those concerns are implemented
+
 This repo demonstrates the following patterns, all present and working:
 
 ### Agent entry point
