@@ -13,15 +13,70 @@ Use this repo as a template and a conversation starter: fork it, adapt the tooli
 
 AI infrastructure is the set of files, conventions, and workflows that make a codebase legible and actionable to an AI agent — regardless of which AI tool or harness your team uses.
 
-This repo demonstrates four patterns:
+This repo demonstrates the following patterns, all present and working:
 
-**Agent entry point (`AGENTS.md`)** — A top-level file that orients any AI agent to the repo: layout, API contracts, how to start services, where tests live, and which runbooks exist. An agent that reads this file first can act without asking questions.
+### Agent entry point
 
-**Operational runbooks (`.agents/skills/`)** — Focused, step-by-step playbooks for workflows that recur or require precise sequencing — things like the dev→observe→fix loop. Runbooks encode institutional knowledge in a form agents can follow reliably. They are also self-healing: when an agent hits a gap or a better approach mid-task, it surfaces the finding, proposes a specific update to the runbook, and asks the engineer to approve it. Every edge case becomes a permanent improvement.
+`AGENTS.md` orients any AI agent to the repo before it touches a file. It covers the project summary, repo layout, docs-as-code conventions, working flows (normal work, dev loop, plans), verification requirements, issue tracking, logging conventions, and code comment standards. An agent that reads it first can act without asking questions.
 
-**Unified command surface (`Makefile`)** — A single, documented entry point for every lifecycle action: install, dev, test, build, deploy. Any agent (or human) can run `make` to see all available goals. Commands here are the canonical source of truth — runbooks and docs reference them rather than repeating raw commands.
+### Operational runbooks
 
-**Layered test framework** — Backend unit tests (pytest), frontend unit tests (Vitest + React Testing Library), and end-to-end tests (Playwright). An agent can run each layer independently to verify a change before marking work complete.
+`.agents/skills/` contains focused, step-by-step playbooks for every recurring or high-stakes workflow. Each skill is a markdown file the agent reads on demand; the harness surfaces the right one based on the task.
+
+| Skill | What it does |
+|---|---|
+| `dev-loop` | Start services, observe live behavior, edit, verify in browser, run targeted tests |
+| `git-commit` | Commit using Conventional Commits and the project's `.gitmessage` |
+| `create-pr` | Run verification, fill the PR template, push, and open the PR via `gh` |
+| `work-complete-verification` | Four-step gate before any PR: preflight → coverage → logging → docs review |
+| `audit-and-fix-test-coverage` | Diff the branch, assess test coverage per layer, write missing valuable tests |
+| `audit-and-fix-logging` | Audit changed code for appropriate logging, add what is missing |
+| `lint-and-fix` | Run lint and format checks, auto-fix, handle residuals |
+| `test-and-fix` | Isolate failing tests, fix production code, never delete tests |
+| `create-github-issue` | Open a GitHub issue using the right template and label taxonomy |
+| `docs-create-adr` | Write an Architecture Decision Record, update the index, cross-link |
+| `docs-absorb-plan` | Fold a shipped plan's durable content into living architecture docs and ADRs |
+| `docs-refresh` | Repo-wide doc health sweep: fix inaccuracies, remove useless content, fill gaps, absorb plans |
+
+All skills are self-healing: when an agent encounters a situation a runbook does not handle, it surfaces the gap, proposes a specific update, and asks for approval. Every edge case becomes a permanent improvement.
+
+### Unified command surface
+
+`Makefile` is the single, documented entry point for every lifecycle action. Run `make` to see all available goals. Runbooks and docs reference `make` targets rather than repeating raw commands — when a command changes, one place changes.
+
+| Goal | Purpose |
+|---|---|
+| `make dev` / `make prod` | Start dev (hot reload) or production (Docker) stack |
+| `make test-backend` / `make test-frontend` / `make test-e2e` | Run individual test layers |
+| `make preflight` | Full gate: lint + format + all tests |
+| `make lint` / `make lint-fix` | Lint check or auto-fix (Ruff + ESLint) |
+| `make format` / `make format-fix` | Format check or auto-fix (Ruff + Prettier) |
+| `make openapi` / `make openapi-preview` | Regenerate or preview the API spec (Redoc) |
+
+### Layered tests with CI
+
+Three independent test layers — backend unit (pytest + httpx), frontend unit (Vitest + React Testing Library), and end-to-end (Playwright) — each runnable with a single `make` command. Playwright manages its own service lifecycle so E2E runs cleanly in CI without manual setup.
+
+A GitHub Actions workflow runs `make preflight` on every pull request.
+
+### Doc-as-code
+
+`docs/` follows the living-vs-historical convention: `docs/architecture/` and `docs/adr/` stay in sync with the code; `docs/plans/` is append-only historical record. The `docs/README.md` defines what goes where and the conventions for prose, diagrams, and links.
+
+`docs/specs/openapi.json` is generated from FastAPI route definitions and Pydantic models via `make openapi` — the API spec is always derived from code, never hand-maintained.
+
+### Structured PR workflow
+
+`.github/PULL_REQUEST_TEMPLATE.md` enforces a consistent review checklist: summary, changes by area, testing (all `make` targets explicitly checked), docs and architecture review (architecture updated? ADR added? docstrings present? deferred work tracked?).
+
+### Code conventions in AGENTS.md
+
+Beyond workflows, `AGENTS.md` records the conventions an agent must follow:
+- **Logging** — first-class design; level table (verbose → debug → info → warning → error); Python `logging` module with custom `VERBOSE` level; frontend `console.*`
+- **Testing** — valuable vs useless test definition; test requirements must not drive production code shape; never delete without permission
+- **Linting and formatting** — Ruff (Python) and ESLint + Prettier (JS); `make preflight` is the gate
+- **Code comments** — docstrings and JSDoc on all non-private symbols; inline comments only when code cannot speak for itself
+- **Issue tracking** — GitHub Issues with label taxonomy and templates via `create-github-issue`
 
 ## Who This Is For
 
