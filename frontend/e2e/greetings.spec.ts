@@ -1,9 +1,18 @@
 import { expect, test } from '@playwright/test';
 
-test('displays all greetings', async ({ page }) => {
+test('selects a language and displays its dynamic greeting', async ({ page }) => {
   await page.goto('/');
 
-  const greetingItems = page.locator('[data-testid="greeting-item"]');
-  await expect(greetingItems).toHaveCount(10);
-  await expect(page.getByText('Hello, World!')).toBeVisible();
+  const selector = page.getByTestId('language-selector');
+  await expect(selector).toBeVisible();
+  await expect(selector.locator('option')).toHaveCount(10);
+
+  const display = page.getByTestId('greeting-display');
+  await expect(display.locator('h1')).not.toHaveText('');
+
+  await selector.selectOption('ja');
+
+  await expect(selector).toHaveValue('ja');
+  await expect(display.getByText('Japanese — 日本語')).toBeVisible();
+  await expect(display.locator('h1')).not.toHaveText('');
 });

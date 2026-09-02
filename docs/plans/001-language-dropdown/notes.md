@@ -13,3 +13,7 @@ Tests use `httpx.MockTransport` against the real request-building and response-p
 ### Task 3: Locale-aware dropdown interface
 
 Vitest's default discovery included the Playwright `e2e/greetings.spec.ts` file because both frameworks use `.spec` names. `frontend/vite.config.js` now limits Vitest discovery to `tests/**/*.{test,spec}.{js,jsx}`, keeping the unit and E2E runners isolated.
+
+### Task 4: E2E and OpenAPI
+
+The end-to-end check intentionally asserts a non-empty dynamic greeting plus the selected language label rather than an exact translation string, because MyMemory may vary punctuation or wording. The live external request completed successfully during implementation.
