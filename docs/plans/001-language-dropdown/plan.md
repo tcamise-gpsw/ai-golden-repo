@@ -117,7 +117,7 @@
 - [x] Add/update tests covering: `LanguageSelector` renders all options and fires `onSelect`; `GreetingDisplay` renders greeting/loading/error states; `resolveLocale` for `ja-JP`→`ja`, `zh-TW`→`zh-CN`, `en-US`→`en`, unknown→`en`; `App` selects locale default and renders translated greeting (fetch mocked for both endpoints)
 
 **Commit & document:**
-- [x] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Use the `git-commit` skill, stage relevant files, commit in Conventional Commits format. Then `git push`.
 - [x] Append to `notes.md` under a `### Task 3` heading. Write `N/A` if nothing worth recording.
 - [x] All above checked — call `todo done` to advance.
 
@@ -145,7 +145,7 @@
 - [x] Run `make test-e2e` (services auto-start; set `CI=true` to always start fresh)
 
 **Commit & document:**
-- [x] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Use the `git-commit` skill, stage relevant files, commit in Conventional Commits format. Then `git push`.
 - [x] Append to `notes.md` under a `### Task 4` heading. Write `N/A` if nothing worth recording.
 - [x] All above checked — call `todo done` to advance.
 
@@ -176,7 +176,7 @@
 - [x] N/A (documentation only) — verify all internal markdown links resolve
 
 **Commit & document:**
-- [x] Read `'/Users/tcamise/.claude/skills/commit'`, stage relevant untracked files, commit with `git commit -m` in Conventional Commits format. Then `git push`.
+- [x] Use the `git-commit` skill, stage relevant files, commit in Conventional Commits format. Then `git push`.
 - [x] Append to `notes.md` under a `### Task 5` heading. Write `N/A` if nothing worth recording.
 - [x] All above checked — call `todo done` to advance.
 

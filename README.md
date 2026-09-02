@@ -6,7 +6,7 @@
 
 ## What This Repo Is
 
-`ai-golden-repo` is a reference implementation showing how AI infrastructure can be woven into a real software project at GoPro. The example project is deliberately trivial — the point is the infrastructure around it, not the code.
+`ai-golden-repo` is a reference implementation showing how AI infrastructure can be woven into a real software project. The example project is deliberately trivial — the point is the infrastructure around it, not the code.
 
 Use this repo as a template and a conversation starter: fork it, adapt the tooling, and carry the patterns into your own team's work.
 

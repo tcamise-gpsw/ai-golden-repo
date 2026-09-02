@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-09-02
-- **Deciders:** GoPro AI golden-repo team
+- **Deciders:** ai-golden-repo maintainers
 
 ## Context
 
