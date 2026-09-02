@@ -53,15 +53,43 @@ See [docs/README.md](docs/README.md) for the full plan lifecycle.
 
 ## Tests
 
-*Test conventions to be defined.*
-
-Three layers exist: backend unit (pytest), frontend unit (Vitest + RTL), and E2E (Playwright). Each is runnable independently:
+Three layers, each runnable independently:
 
 ```sh
 make test-backend    # pytest
 make test-frontend   # Vitest
 make test-e2e        # Playwright — requires both services running
 ```
+
+### Coverage
+
+Strive for maximum coverage where valuable tests can be written. A test is valuable when it:
+
+- Verifies observable behavior that would fail silently if broken
+- Exercises a boundary, edge case, or invariant the happy path doesn't reach
+- Catches a real class of bug — not a failure mode that cannot occur
+- Documents expected behavior that is non-obvious from the code
+
+A test is not valuable — and should not be written — when it:
+
+- Tests implementation details rather than behavior (internal call counts, private method state)
+- Duplicates an existing test without adding a new scenario
+- Would pass regardless of whether the feature works correctly
+- Exists only to satisfy a coverage metric
+
+High coverage from valuable tests is the goal. High coverage from useless tests is worse than lower coverage, because it creates maintenance cost without safety.
+
+### Test requirements and production code
+
+Test requirements must not drive the shape of production code. Do not add hooks, seams, or escape hatches to production code solely to make it testable.
+
+Production code should, however, be architected with testability as a natural quality: dependencies injected rather than hardcoded, logic separated from I/O, side effects isolated at boundaries. This is good design independently of tests — testability is a consequence, not the goal.
+
+When a piece of production code is genuinely hard to test, treat it as a design signal rather than a reason to work around it.
+
+### Deleting tests
+
+Never delete a test without explicit permission from the user. If a test appears redundant, broken, or misguided, flag it and explain why — do not remove it unilaterally.
 
 ## Code comments
 
