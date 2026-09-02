@@ -96,3 +96,18 @@ The E2E suite requires both backend and frontend services to be running.
 | Skill | Description |
 | --- | --- |
 | `dev-loop` | Own the start, observe, fix, hot-reload, and targeted-verification loop for this application. |
+
+## Code comments
+
+**Docstrings and JSDoc on all non-private symbols.** Every public Python function, class, and module carries a docstring. Every exported React component carries a JSDoc block. These feed the generated API reference (`make openapi`, docstrings, JSDoc) and are not optional.
+
+**Private symbols: comment when the intent is not obvious from the name and body alone.** A private helper named `_normalise_key` that does exactly that needs nothing. A private helper that encodes a non-obvious invariant, works around a library quirk, or has a precondition the caller must satisfy needs a comment.
+
+**Inline comments: add only when the code cannot speak for itself.** A comment is valuable when it explains one of:
+- *Why* — the reason a choice was made that looks wrong or surprising ("casefold not lower: handles Unicode titlecase")
+- *Precondition or invariant* — a constraint the reader needs to know to modify the code safely
+- *Non-obvious consequence* — a side effect or coupling that is not visible at the call site
+
+A comment is not valuable when it restates what the code already says (`# increment counter`), narrates obvious control flow, or pads for the sake of coverage.
+
+**No commented-out code.** Dead code lives in git history, not in the source.

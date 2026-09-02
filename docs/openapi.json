@@ -1,0 +1,157 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello World API",
+    "description": "Returns Hello World greetings in multiple languages.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/greetings": {
+      "get": {
+        "summary": "List Greetings",
+        "description": "Return all greetings, one per supported language.",
+        "operationId": "list_greetings_api_greetings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Greeting"
+                  },
+                  "type": "array",
+                  "title": "Response List Greetings Api Greetings Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/greetings/{language}": {
+      "get": {
+        "summary": "Get Greeting",
+        "description": "Return the greeting for a single language.\n\nMatching is case-insensitive on the English language name\n(e.g. ``japanese``, ``Japanese``, and ``JAPANESE`` all resolve).\n\nRaises **404** when the language is not in the data set.",
+        "operationId": "get_greeting_api_greetings__language__get",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Language"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Greeting"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Greeting": {
+        "properties": {
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "description": "English name of the language (e.g. 'Japanese')."
+          },
+          "native_name": {
+            "type": "string",
+            "title": "Native Name",
+            "description": "Language name written in the language itself (e.g. '\u65e5\u672c\u8a9e')."
+          },
+          "greeting": {
+            "type": "string",
+            "title": "Greeting",
+            "description": "Hello World in that language (e.g. '\u3053\u3093\u306b\u3061\u306f')."
+          }
+        },
+        "type": "object",
+        "required": [
+          "language",
+          "native_name",
+          "greeting"
+        ],
+        "title": "Greeting",
+        "description": "A single Hello World greeting in one language."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

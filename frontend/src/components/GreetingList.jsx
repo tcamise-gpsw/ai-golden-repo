@@ -1,3 +1,13 @@
+/**
+ * Renders an unordered list of {@link Greeting} objects.
+ *
+ * Each item displays the greeting prominently with the English language
+ * name and native script name as secondary labels.
+ *
+ * @param {Object}     props
+ * @param {Greeting[]} props.greetings - Greetings to display.
+ * @returns {JSX.Element}
+ */
 export default function GreetingList({ greetings }) {
   return (
     <ul>

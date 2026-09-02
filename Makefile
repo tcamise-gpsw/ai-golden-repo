@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: build dev dev-backend dev-frontend down help install test test-backend test-e2e test-frontend up
+.PHONY: build dev dev-backend dev-frontend down help install openapi openapi-preview test test-backend test-e2e test-frontend up
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -12,6 +12,17 @@ install: ## Install all backend and frontend dependencies
 	cd backend && pip install -e '.[dev]'
 	cd frontend && npm install
 	cd frontend && npx playwright install --with-deps
+
+
+# ── Docs ─────────────────────────────────────────────────────────────────────
+
+openapi: ## Regenerate docs/openapi.json from FastAPI route definitions
+	cd backend && python -c \
+	  "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" \
+	  > ../docs/openapi.json
+
+openapi-preview: ## Preview docs/openapi.json with Redoc in browser (no backend required)
+	npx @redocly/cli preview-docs docs/openapi.json
 
 # ── Dev ──────────────────────────────────────────────────────────────────────
 

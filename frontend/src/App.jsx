@@ -1,3 +1,19 @@
+/**
+ * @typedef {Object} Greeting
+ * @property {string} language    - English name of the language (e.g. "Japanese").
+ * @property {string} native_name - Language name in its own script (e.g. "日本語").
+ * @property {string} greeting    - Hello World in that language (e.g. "こんにちは").
+ */
+
+/**
+ * Root application component.
+ *
+ * Fetches the full greeting list from GET /api/greetings on mount and
+ * delegates rendering to {@link GreetingList}. Displays a loading state
+ * while the request is in flight and an error message on failure.
+ *
+ * @returns {JSX.Element}
+ */
 import { useEffect, useState } from 'react';
 import GreetingList from './components/GreetingList';
 
