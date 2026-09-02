@@ -17,3 +17,7 @@ Vitest's default discovery included the Playwright `e2e/greetings.spec.ts` file 
 ### Task 4: E2E and OpenAPI
 
 The end-to-end check intentionally asserts a non-empty dynamic greeting plus the selected language label rather than an exact translation string, because MyMemory may vary punctuation or wording. The live external request completed successfully during implementation.
+
+### Task 5: ADR and living architecture
+
+The external API boundary also invalidated the system-context and container documents, not only the API and frontend pages named in the original plan. All four living architecture documents were updated. AI-harness language was removed from the system architecture so the app architecture remains product-focused.
