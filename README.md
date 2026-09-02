@@ -1,6 +1,7 @@
 # README-META
 
-> [!NOTE] **This file is the only file in this repository written from a meta perspective.**
+> [!NOTE]
+> **This file is the only file in this repository written from a meta perspective.**
 > Everything else belongs to the example project itself.
 
 ## What This Repo Is
@@ -33,7 +34,8 @@ Carry the patterns into your own team's repo:
 - Consolidate commands behind `make` (or your team's equivalent)
 - Ensure your test layers can each be invoked in a single command
 
-> [!NOTE] Future work may make templates or AI driven bootstrapping from this repo.
+> [!NOTE]
+> Future work may make templates or AI-driven bootstrapping from this repo.
 
 ### Where AI is actively aiding
 
@@ -86,7 +88,8 @@ Beyond workflows, `AGENTS.md` records the conventions an agent must follow:
 | `work-complete-verification` | Five-step gate before any PR: preflight → coverage → logging → docs review → code review |
 | `code-review` | Check changed code against project patterns, architecture docs, and ADRs for violations |
 
-> [!TIP] Where relevant, all skills are self-healing: when an agent encounters a situation a runbook does not handle, it surfaces the gap, proposes a specific update, and asks for approval. Every edge case becomes a permanent improvement.
+> [!TIP]
+> Where relevant, all skills are self-healing: when an agent encounters a situation a runbook does not handle, it surfaces the gap, proposes a specific update, and asks for approval. Every edge case becomes a permanent improvement.
 
 ### Doc-as-code and Assisted Maintenance
 
