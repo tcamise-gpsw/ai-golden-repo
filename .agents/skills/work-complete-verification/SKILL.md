@@ -23,7 +23,7 @@ Do not move to the coverage audit while the gate is failing.
 
 ## 2. Coverage audit
 
-Invoke `audit-test-coverage`. It diffs the branch, assesses whether the changed behavior is adequately tested across all three layers, and identifies gaps. Any missing valuable tests are written and verified before proceeding.
+Invoke `audit-and-fix-test-coverage`. It diffs the branch, assesses coverage across all three test layers, writes any missing valuable tests, and verifies they pass before proceeding.
 
 Do not move to the documentation review while coverage gaps remain unaddressed.
 

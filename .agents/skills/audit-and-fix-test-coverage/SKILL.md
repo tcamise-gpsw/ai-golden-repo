@@ -1,11 +1,11 @@
 ---
-name: audit-test-coverage
-description: Use when verifying a branch is ready for review, after implementing a feature or fix, or whenever asked to check test coverage. Audits whether the changed code has appropriate tests — not just that tests pass, but that the right things are tested. Triggered automatically by work-complete-verification and on phrases like "check coverage", "audit tests", "are tests adequate".
+name: audit-and-fix-test-coverage
+description: Use when verifying a branch is ready for review, after implementing a feature or fix, or whenever asked to check or improve test coverage. Audits whether changed code has appropriate tests, then writes any missing valuable tests and verifies they pass. Triggered automatically by work-complete-verification and on phrases like "check coverage", "audit tests", "fix coverage", "are tests adequate", "add missing tests".
 ---
 
-# Audit test coverage
+# Audit and fix test coverage
 
-The goal is not a coverage number — it is confidence that meaningful behavior is tested. Read the principles in `AGENTS.md` (Tests section) first; this skill adds the tool-specific patterns.
+The goal is not a coverage number — it is confidence that meaningful behavior is tested. Read the principles in `AGENTS.md` (Tests section) first; this skill adds the tool-specific patterns and the fix loop.
 
 ## 1. Identify what changed
 
@@ -123,25 +123,41 @@ const items = page.locator('[data-testid="greeting-item"]');
 await expect(items).toHaveCount(10);
 ```
 
-## 3. Determine what is missing
+## 3. Fix gaps
 
-For each gap, decide:
-- Is this a valuable test (see AGENTS.md definition)? If yes, write it.
-- Is this an edge case that cannot realistically fail? Note it but skip.
-- Is this implementation detail testing? Skip.
+For each gap identified:
 
-Write only tests that would catch a real regression. Propose the tests to the user if the scope is unclear — do not add tests unilaterally to pass a coverage metric.
+- **Valuable test** (catches a real regression, tests observable behavior) → write it now.
+- **Scope unclear** → describe the gap and proposed test to the user; get approval before writing.
+- **Edge case that cannot realistically fail** → note it, skip it.
+- **Implementation detail** → skip it; do not write.
 
-## 4. Report
+Write directly into the appropriate test file following the existing conventions. Do not create new test files when an existing one covers the same component or module.
+
+Never delete or modify an existing test to make a new one fit. Never weaken assertions to avoid failures — if a new test reveals a real bug, fix the bug.
+
+## 4. Verify
+
+Re-run the test layer(s) where new tests were added:
+
+```sh
+make test-backend    # if backend tests were added
+make test-frontend   # if frontend tests were added
+make test-e2e        # if E2E tests were added
+```
+
+All must pass. If a newly written test fails, fix it before proceeding — do not leave a failing test.
+
+## 5. Report
 
 Tell the user:
-- What changed and what test coverage exists for it
-- Any gaps and whether you filled them or skipped them (and why)
-- Whether coverage is adequate to proceed
+- What changed and what existing coverage existed
+- Gaps found, what was written (with file and test name), what was skipped and why
+- Whether coverage is now adequate to proceed
 
 ## Improving this skill
 
-If a test pattern recurs that this skill doesn't document, or a coverage gap type isn't addressed:
+If a test pattern recurs that this skill doesn't document, or a gap type isn't addressed:
 1. Note it during the audit.
 2. Propose a specific addition to this file.
 3. Ask for approval before applying.
