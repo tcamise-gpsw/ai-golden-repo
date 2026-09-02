@@ -2,7 +2,7 @@
 
 ## Project summary
 
-This repository is a deliberately trivial multilingual Hello World app — a Python/FastAPI backend and a React/Vite frontend — used as a reference implementation for AI-assisted development patterns at GoPro. The application is not the point; the infrastructure around it is. Read [README-META.md](README-META.md) for the full rationale.
+A multilingual Hello World app: Python/FastAPI backend serving greeting data, React/Vite frontend rendering it. See [README.md](README.md) for setup and [README-META.md](README-META.md) for project context.
 
 ## Repo layout
 
