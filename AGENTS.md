@@ -93,6 +93,22 @@ When a piece of production code is genuinely hard to test, treat it as a design 
 
 Never delete a test without explicit permission from the user. If a test appears redundant, broken, or misguided, flag it and explain why — do not remove it unilaterally.
 
+
+## Linting and formatting
+
+All code must pass lint and format checks before committing. Run the check-only target to see issues without changing files, or the fix target to apply automatic corrections:
+
+```sh
+make lint        # check — no changes written
+make lint-fix    # auto-fix what can be fixed
+```
+
+**Backend (Python):** [Ruff](https://docs.astral.sh/ruff/) handles both linting and formatting. Configuration lives in `backend/pyproject.toml` under `[tool.ruff]`.
+
+**Frontend (JS/JSX):** [ESLint](https://eslint.org/) for lint rules, [Prettier](https://prettier.io/) for formatting. Configuration lives in `frontend/eslint.config.js` and `frontend/.prettierrc.json`.
+
+Run `make lint` before committing. If `make lint-fix` cannot resolve an issue automatically, fix it manually — do not suppress or disable rules without explicit user approval.
+
 ## Code comments
 
 **Docstrings and JSDoc on all non-private symbols.** Every public Python function, class, and module carries a docstring. Every exported React component carries a JSDoc block. These feed the generated API reference (`make openapi`, docstrings, JSDoc) and are not optional.

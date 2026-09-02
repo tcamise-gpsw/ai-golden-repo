@@ -10,7 +10,9 @@ describe('GreetingList', () => {
   it('renders_all_items', () => {
     render(<GreetingList greetings={greetings} />);
 
-    expect(screen.getAllByTestId('greeting-item')).toHaveLength(greetings.length);
+    expect(screen.getAllByTestId('greeting-item')).toHaveLength(
+      greetings.length
+    );
   });
 
   it('renders_greeting_text', () => {

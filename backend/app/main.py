@@ -18,8 +18,12 @@ class Greeting(BaseModel):
     """A single Hello World greeting in one language."""
 
     language: str = Field(description="English name of the language (e.g. 'Japanese').")
-    native_name: str = Field(description="Language name written in the language itself (e.g. '日本語').")
-    greeting: str = Field(description="Hello World in that language (e.g. 'こんにちは').")
+    native_name: str = Field(
+        description="Language name written in the language itself (e.g. '日本語')."
+    )
+    greeting: str = Field(
+        description="Hello World in that language (e.g. 'こんにちは')."
+    )
 
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "greetings.json"

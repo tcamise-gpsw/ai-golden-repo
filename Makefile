@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: build dev dev-backend dev-frontend down help install openapi openapi-preview preflight prod test test-backend test-e2e test-frontend
+.PHONY: build dev dev-backend dev-frontend down help install lint lint-fix openapi openapi-preview preflight prod test test-backend test-e2e test-frontend
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -20,6 +20,14 @@ openapi: ## Regenerate docs/specs/openapi.json from FastAPI route definitions
 	cd backend && python -c \
 	  "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" \
 	  > ../docs/specs/openapi.json
+
+lint: ## Check linting and formatting (no changes written)
+	cd backend && ruff check . && ruff format --check .
+	cd frontend && npm run lint
+
+lint-fix: ## Auto-fix lint and formatting issues
+	cd backend && ruff check --fix . && ruff format .
+	cd frontend && npm run lint:fix
 
 openapi-preview: ## Preview docs/specs/openapi.json with Redoc in browser (no backend required)
 	npx @redocly/cli preview-docs docs/specs/openapi.json

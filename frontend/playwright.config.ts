@@ -12,7 +12,8 @@ export default defineConfig({
     {
       // Start the FastAPI backend before the suite runs.
       // reuseExistingServer: reuse a running dev server locally; always start fresh in CI.
-      command: 'cd ../backend && uvicorn app.main:app --host 0.0.0.0 --port 8000',
+      command:
+        'cd ../backend && uvicorn app.main:app --host 0.0.0.0 --port 8000',
       port: 8000,
       reuseExistingServer: !process.env.CI,
     },
