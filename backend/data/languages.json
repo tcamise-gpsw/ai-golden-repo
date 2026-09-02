@@ -1,0 +1,12 @@
+[
+  {"language": "English", "native_name": "English", "code": "en"},
+  {"language": "Spanish", "native_name": "Español", "code": "es"},
+  {"language": "French", "native_name": "Français", "code": "fr"},
+  {"language": "German", "native_name": "Deutsch", "code": "de"},
+  {"language": "Japanese", "native_name": "日本語", "code": "ja"},
+  {"language": "Mandarin Chinese", "native_name": "普通话", "code": "zh-CN"},
+  {"language": "Arabic", "native_name": "العربية", "code": "ar"},
+  {"language": "Portuguese", "native_name": "Português", "code": "pt"},
+  {"language": "Russian", "native_name": "Русский", "code": "ru"},
+  {"language": "Korean", "native_name": "한국어", "code": "ko"}
+]
