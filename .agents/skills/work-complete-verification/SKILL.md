@@ -1,11 +1,11 @@
 ---
 name: work-complete-verification
-description: Use before marking any work complete, before opening a PR, or whenever asked to verify a branch is ready. Runs the full preflight gate, reviews docs for completeness, and commits any corrections. Triggers on phrases like "verify my work", "is this ready", "check before PR", "run preflight", or as a first step inside create-pr.
+description: Use before marking any work complete, before opening a PR, or whenever asked to verify a branch is ready. Runs the full preflight gate, then coverage, logging, documentation, and code review. Triggers on phrases like "verify my work", "is this ready", "check before PR", "run preflight", or as a first step inside create-pr.
 ---
 
 # Work-complete verification
 
-Run this before declaring work done or opening a PR. It owns four concerns in order: the technical gate, coverage audit, logging audit, then documentation review.
+Run this before declaring work done or opening a PR. It owns five concerns in order: the technical gate, coverage audit, logging audit, documentation review, then code review.
 
 ## 1. Gate — make preflight
 
@@ -56,7 +56,11 @@ Do not absorb content from `docs/plans/` — that is a separate, user-initiated 
 
 If any of these checks result in changes, commit them using `git-commit` before the verification is considered complete.
 
-## 4. Report
+## 5. Code review
+
+Invoke `code-review`. It checks changed code against the domain-specific patterns defined in `AGENTS.md` — error handling, response models, component structure, test hooks, logging — things lint and format cannot catch.
+
+## 6. Report
 
 - Gate: passed / what failed and how it was fixed
 - Coverage: what gaps existed, what was written, what was skipped and why

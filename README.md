@@ -43,6 +43,25 @@ make test-e2e       # Playwright (starts required services automatically)
 make preflight      # lint + format + all three layers — the full CI gate
 ```
 
+## Make targets
+
+Run `make` with no arguments to list all goals. Key targets:
+
+| Target | Purpose |
+|---|---|
+| `make install` | Install all backend and frontend dependencies |
+| `make dev` | Start both services with hot reload (Ctrl-C stops both) |
+| `make prod` | Start the production stack via Docker Compose |
+| `make down` | Stop the production stack |
+| `make test-backend` | pytest |
+| `make test-frontend` | Vitest |
+| `make test-e2e` | Playwright (services auto-started) |
+| `make preflight` | Full gate — lint + format + all tests |
+| `make lint` / `make lint-fix` | Lint check or auto-fix (Ruff + ESLint) |
+| `make format` / `make format-fix` | Format check or auto-fix (Ruff + Prettier) |
+| `make openapi` | Regenerate `docs/specs/openapi.json` from FastAPI routes |
+| `make openapi-preview` | Preview the API spec with Redoc (no backend required) |
+
 ## Contributing
 
 ### Before you start

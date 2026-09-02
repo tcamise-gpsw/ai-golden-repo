@@ -1,7 +1,9 @@
 # Architecture Decision Records
 
 An ADR records a single architecturally significant decision and why it was made — a durable
-answer to "why is it built this way?" that outlives the discussion that produced it.
+answer to "why is it built this way?" that outlives the discussion that produced it. Accepted
+ADRs are checked for violations during code review via the `code-review` skill; a change that
+contradicts an accepted ADR must either be corrected or superseded by a new ADR.
 
 ## When to write one
 
