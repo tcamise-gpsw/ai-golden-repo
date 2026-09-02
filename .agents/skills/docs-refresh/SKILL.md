@@ -31,7 +31,7 @@ Leave unshipped plans untouched.
 
 ## 2. Check living docs for inaccuracies
 
-Read every living doc: `docs/architecture/`, `docs/adr/`, `AGENTS.md`, `README.md`, `docs/README.md`.
+Read every living doc: `docs/architecture/`, `docs/adr/`, `AGENTS.md`, `README.md`, `README-project.md`, `docs/README.md`.
 
 For each doc, verify:
 

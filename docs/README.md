@@ -36,7 +36,8 @@ How this application's documentation is organized, and the rules for keeping it 
 
 | Location | Contains | Audience | Kind |
 |---|---|---|---|
-| [README.md](../README.md) (root) | Installing and running the app | End users | Living |
+| [README.md](../README.md) (root) | AI infrastructure overview — what this repo is and why | Everyone | Living |
+| [README-project.md](../README-project.md) (root) | Installing and running the app | End users | Living |
 | [AGENTS.md](../AGENTS.md) (root) | Dev/test/commit conventions, agent workflow | Contributors, agents | Living |
 | [docs/architecture/](architecture/) | System structure, container breakdown, component rationale — also the authoritative source of architectural constraints enforced by the `code-review` skill | Contributors | Living |
 | [docs/adr/](adr/) | Architecture Decision Records — decisions recorded here are checked for violations during code review | Contributors | Append-only, immutable |
@@ -48,14 +49,14 @@ How this application's documentation is organized, and the rules for keeping it 
 Two categories matter:
 
 - **Living docs** ([architecture/](architecture/), [adr/](adr/), top-level [docs/](./)
-  files, and root [README.md](../README.md)/[AGENTS.md](../AGENTS.md)) describe the
+  files, and root [README.md](../README.md)/[README-project.md](../README-project.md)/[AGENTS.md](../AGENTS.md)) describe the
   system *as it is now* and are kept in sync with the code.
 - **Point-in-time docs** ([plans/](plans/)) capture a change effort *as it was planned*.
   They are not updated after the work ships — their durable content folds into the living
   docs and ADRs.
 
 There is no guides directory. API usage is in Python docstrings and JSDoc; end-user
-usage is the root [README.md](../README.md); contributor mechanics are in
+usage is the root [README-project.md](../README-project.md); contributor mechanics are in
 [AGENTS.md](../AGENTS.md); and how to extend a component lives next to it in
 [architecture/](architecture/). Do not create a parallel prose layer that duplicates
 these.
@@ -131,7 +132,7 @@ latter.
 
 | You're documenting… | Put it in… |
 |---|---|
-| How a user installs/runs the app | root [README.md](../README.md) |
+| How a user installs/runs the app | root [README-project.md](../README-project.md) |
 | How to build, test, or commit | [AGENTS.md](../AGENTS.md) |
 | How the system is structured / why | [docs/architecture/](architecture/) |
 | A significant, hard-to-reverse decision | [docs/adr/](adr/) |

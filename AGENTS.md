@@ -2,7 +2,7 @@
 
 ## Project summary
 
-A multilingual Hello World app: Python/FastAPI backend serving greeting data, React/Vite frontend rendering it. See [README.md](README.md) for setup and [README-META.md](README-META.md) for project context.
+A multilingual Hello World app: Python/FastAPI backend serving greeting data, React/Vite frontend rendering it. See [README-project.md](README-project.md) for setup and [README.md](README.md) for project context.
 
 ## Repo layout
 
@@ -15,7 +15,7 @@ A multilingual Hello World app: Python/FastAPI backend serving greeting data, Re
 ├── .agents/skills/       # Project-local agent skills
 ├── docker-compose.yml    # Production service composition
 ├── Makefile              # Unified command surface — run `make` to see all goals
-└── README.md             # End-user setup and usage
+└── README-project.md     # End-user setup and usage
 ```
 
 ## Docs-as-code
