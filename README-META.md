@@ -1,6 +1,6 @@
 # README-META
 
-> **This file is the only file in this repository written from a meta perspective.**
+> [!NOTE] **This file is the only file in this repository written from a meta perspective.**
 > Everything else belongs to the example project itself.
 
 ## What This Repo Is
@@ -77,6 +77,82 @@ Beyond workflows, `AGENTS.md` records the conventions an agent must follow:
 - **Linting and formatting** — Ruff (Python) and ESLint + Prettier (JS); `make preflight` is the gate
 - **Code comments** — docstrings and JSDoc on all non-private symbols; inline comments only when code cannot speak for itself
 - **Issue tracking** — GitHub Issues with label taxonomy and templates via `create-github-issue`
+
+## Workflow diagrams
+
+### Normal work
+
+Edit source, run the narrowest test layer, commit. Lint and test repair skills handle failures without breaking the flow.
+
+```mermaid
+flowchart LR
+    Edit["Edit source"] --> Test["make test-backend\nor test-frontend"]
+    Test -->|pass| Commit["git-commit"]
+    Test -->|fail| TestFix["test-and-fix"]
+    TestFix --> Test
+    Commit -->|lint fails| LintFix["lint-and-fix"]
+    LintFix --> Commit
+```
+
+### Full dev loop
+
+Used when live behavior must be observed — a rendering issue, a bug only visible in the browser, or a hot-reload edge case.
+
+```mermaid
+flowchart TD
+    Start["dev-loop skill"] --> Services["Start services\nhub: backend + frontend"]
+    Services --> Observe["Observe in browser"]
+    Observe --> Logs["Tail logs by level\nINFO → WARNING → ERROR → DEBUG"]
+    Logs --> Edit["Edit source"]
+    Edit --> Reload["Hot reload\nuvicorn --reload / Vite HMR"]
+    Reload --> Verify["Verify in browser"]
+    Verify -->|resolved| Tests["Targeted tests\nmake test-backend / test-frontend"]
+    Verify -->|not resolved| Logs
+    Tests --> Commit["git-commit"]
+```
+
+### Verify before completing work
+
+Four steps run in order. Each must be clean before the next begins.
+
+```mermaid
+flowchart TD
+    WCV["work-complete-verification"] --> Gate["make preflight\nlint · format · all tests"]
+    Gate -->|fail| Repair["lint-and-fix\ntest-and-fix"]
+    Repair --> Gate
+    Gate -->|pass| Coverage["audit-and-fix-test-coverage\ncheck coverage · add missing tests"]
+    Coverage --> Logging["audit-and-fix-logging\ncheck levels · add missing logs"]
+    Logging --> Docs["Documentation review\narchitecture · ADR · docstrings · issues"]
+    Docs -->|changes| Commit["git-commit"]
+    Docs -->|clean| Ready["Branch ready"]
+    Commit --> Ready
+```
+
+### Create a pull request
+
+Verification runs first. The PR is opened only when the branch is fully clean.
+
+```mermaid
+flowchart TD
+    CreatePR["create-pr"] --> WCV["work-complete-verification\n(see above)"]
+    WCV --> Template["Fill PR template\nsummary · changes · testing · docs"]
+    Template --> Push["git push"]
+    Push --> GH["gh pr create --draft"]
+```
+
+### Plan lifecycle
+
+Plans capture design before implementation. Once the work ships, durable content moves into living docs.
+
+```mermaid
+flowchart LR
+    Design["docs/plans/NNN/\ndesign.md + plan.md + notes.md"] --> Implement["Implement\nagainst the plan"]
+    Implement --> Verify["work-complete-verification"]
+    Verify --> PR["create-pr"]
+    PR -->|merged| Absorb["docs-absorb-plan"]
+    Absorb --> Arch["docs/architecture/\nupdated"]
+    Absorb --> ADR["docs/adr/\nnew ADRs"]
+```
 
 ## Who This Is For
 
