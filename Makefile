@@ -50,8 +50,13 @@ test-backend: ## Run backend pytest suite
 test-frontend: ## Run frontend Vitest suite
 	cd frontend && npm test
 
-test-e2e: ## Run Playwright E2E tests (requires dev services running)
+test-e2e: ## Run Playwright E2E tests (services auto-started; set CI=true to always start fresh)
 	cd frontend && npm run e2e
+
+preflight: ## Run all tests — unit and E2E (used by CI)
+	$(MAKE) test-backend
+	$(MAKE) test-frontend
+	$(MAKE) test-e2e
 
 # ── Prod ─────────────────────────────────────────────────────────────────────
 

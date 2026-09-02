@@ -26,20 +26,22 @@ Short version: `docs/architecture/` and `docs/adr/` are living and must stay cur
 
 ## Working flows
 
+Development happens in **dev mode** by default (`make dev` — uvicorn + Vite with hot reload). Assume services are running unless instructed otherwise. Use `make prod` only when explicitly asked to work against the production stack.
+
 ### Normal work
 
-For most changes — adding a language, fixing a bug, updating a component — run the relevant test layer after editing and verify it passes. No running services required.
+For most changes — fixing a bug, updating a component, editing data — edit the source, run the relevant test layer, verify it passes.
 
 ```sh
 make test-backend    # after any backend change
 make test-frontend   # after any frontend change
 ```
 
-Run both when a change touches the boundary between them.
+Run both when a change crosses the backend/frontend boundary.
 
 ### Full dev loop
 
-When a change requires observing live behavior — a rendering issue, a hot-reload edge case, a bug visible only in the browser — use the `dev-loop` skill. It covers starting services, tailing logs, editing with hot-reload active, verifying in the browser, and running targeted tests. Invoke it rather than improvising the steps.
+When a change requires observing live behavior — a rendering issue, a bug visible only in the browser, a hot-reload edge case — use the `dev-loop` skill. It covers starting services if needed, tailing logs, editing, verifying in the browser, and running targeted tests. Invoke it rather than improvising the steps.
 
 ### AI-generated plans
 
