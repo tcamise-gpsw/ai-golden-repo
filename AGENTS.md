@@ -172,28 +172,4 @@ A comment is not valuable when it restates what the code already says, narrates 
 
 ## Code review
 
-The `code-review` skill checks changed code against the project's established patterns before a PR is opened. It reads `docs/architecture/` and `docs/adr/` as its primary inputs — those docs define the architectural constraints the skill enforces. The conventions below are the project-level patterns it applies on top of that.
-
-### Backend (Python / FastAPI)
-
-- Every route declares a `response_model` on the decorator and a return type annotation.
-- All error responses use `HTTPException` with an explicit `status_code` and `detail` string — no bare exceptions propagated to the client.
-- External HTTP calls use `httpx.AsyncClient` with a bounded timeout; they are wrapped in try/except and mapped to application-level errors.
-- Business logic lives in the route handler or a dedicated helper, not inlined in Pydantic models.
-- All public models, functions, and modules carry docstrings. Private helpers are commented when their intent is non-obvious.
-- No `print` statements. Logging follows the conventions in the Logging section above.
-
-### Frontend (React / Vite)
-
-- Every exported component has a JSDoc block with `@param` and `@returns`.
-- Components that need stable test selectors carry a `data-testid` attribute.
-- Fetch errors are caught and surfaced to the user — no silent failures. The error message renders in an element with `role="alert"`.
-- No `console.log` calls left in production code. `console.warn` and `console.error` are intentional and remain.
-- State that can be derived from props is not stored in `useState`.
-
-### General
-
-- No commented-out code. Dead code is deleted, not preserved in comments.
-- No `TODO` or `FIXME` comments without a linked GitHub issue.
-- No code duplicated across files when a shared helper would serve — but do not extract prematurely.
-- Naming is precise and consistent with existing conventions in the file and module.
+The `code-review` skill checks changed code before a PR is opened. It reads `docs/architecture/` and `docs/adr/` as its primary inputs — those docs define the architectural constraints the skill enforces — then applies project-level coding patterns on top. The full checklist lives in the skill.
