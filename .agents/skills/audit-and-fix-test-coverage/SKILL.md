@@ -37,18 +37,19 @@ make test-backend
 
 **Patterns to use:**
 ```python
-# Async route test with ASGITransport — no live server needed
+# In-process route test — no live server required
 @pytest.mark.asyncio
-async def test_get_languages():
+async def test_route_happy_path():
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
-        response = await client.get("/api/languages")
+        response = await client.get("/api/resource")
     assert response.status_code == 200
+    assert "expected_field" in response.json()
 
-# Exercise an external HTTP boundary without live network traffic
-translation_client = AsyncClient(transport=MockTransport(handler))
-monkeypatch.setattr(main.httpx, "AsyncClient", lambda **_: translation_client)
+# Isolate an external HTTP boundary with a mock transport
+mock_client = AsyncClient(transport=MockTransport(mock_handler))
+monkeypatch.setattr(main.httpx, "AsyncClient", lambda **_: mock_client)
 ```
 
 **What not to test:**
@@ -71,22 +72,22 @@ make test-frontend
 
 **Patterns to use:**
 ```jsx
-// Test controlled component behavior
-it('reports the selected language code', () => {
+// Controlled component: assert the callback receives the right value
+it('calls onSelect with the chosen value', () => {
   const onSelect = vi.fn();
-  render(
-    <LanguageSelector languages={languages} selected="en" onSelect={onSelect} />
-  );
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'ja' } });
-  expect(onSelect).toHaveBeenCalledWith('ja');
+  render(<MySelector options={options} selected="a" onSelect={onSelect} />);
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'b' } });
+  expect(onSelect).toHaveBeenCalledWith('b');
 });
 
-// Mock sequential API requests at the App boundary
-const fetchMock = vi
-  .fn()
-  .mockResolvedValueOnce({ ok: true, json: async () => languages })
-  .mockResolvedValueOnce({ ok: true, json: async () => translatedGreeting });
-vi.stubGlobal('fetch', fetchMock);
+// Multiple sequential fetches at the App boundary
+vi.stubGlobal(
+  'fetch',
+  vi
+    .fn()
+    .mockResolvedValueOnce({ ok: true, json: async () => firstPayload })
+    .mockResolvedValueOnce({ ok: true, json: async () => secondPayload })
+);
 ```
 
 **What not to test:**
@@ -111,10 +112,11 @@ Use E2E when the behavior requires a real browser or real HTTP. Do not write E2E
 
 **Patterns to use:**
 ```typescript
-const selector = page.getByTestId('language-selector');
-await expect(selector).toBeVisible();
-await selector.selectOption('ja');
-await expect(page.getByTestId('greeting-display').locator('h1')).not.toHaveText('');
+// Wait for an element, then assert structural facts — not exact content
+const trigger = page.getByTestId('action-trigger');
+await expect(trigger).toBeVisible();
+await trigger.click();
+await expect(page.getByTestId('result-display')).not.toHaveText('');
 ```
 
 ## 3. Fix gaps
