@@ -16,13 +16,13 @@ install: ## Install all backend and frontend dependencies
 
 # ── Docs ─────────────────────────────────────────────────────────────────────
 
-openapi: ## Regenerate docs/openapi.json from FastAPI route definitions
+openapi: ## Regenerate docs/specs/openapi.json from FastAPI route definitions
 	cd backend && python -c \
 	  "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" \
-	  > ../docs/openapi.json
+	  > ../docs/specs/openapi.json
 
-openapi-preview: ## Preview docs/openapi.json with Redoc in browser (no backend required)
-	npx @redocly/cli preview-docs docs/openapi.json
+openapi-preview: ## Preview docs/specs/openapi.json with Redoc in browser (no backend required)
+	npx @redocly/cli preview-docs docs/specs/openapi.json
 
 # ── Dev ──────────────────────────────────────────────────────────────────────
 

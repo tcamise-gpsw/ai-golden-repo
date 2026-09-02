@@ -96,6 +96,8 @@ The E2E suite requires both backend and frontend services to be running.
 | Skill | Description |
 | --- | --- |
 | `dev-loop` | Own the start, observe, fix, hot-reload, and targeted-verification loop for this application. |
+| `docs-create-adr` | Write a new Architecture Decision Record, update the index, and cross-link to affected architecture docs. |
+| `docs-absorb-plan` | Fold a shipped plan's durable content into living architecture docs and ADRs; leave the plan as a historical record. |
 
 ## Code comments
 
