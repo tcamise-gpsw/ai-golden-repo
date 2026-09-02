@@ -28,6 +28,7 @@ Do **not** write ADRs for reversible or cosmetic choices, or for anything a shor
 
 | ADR | Title | Status |
 |---|---|---|
+| [ADR-0001](0001-translations-from-external-api.md) | Translations come from an external API | Accepted |
 
 ## Template
 

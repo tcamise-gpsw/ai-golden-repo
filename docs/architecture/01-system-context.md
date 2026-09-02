@@ -2,52 +2,34 @@
 
 This C4 L1 view treats Hello World as one system at its external boundary.
 
-Hello World is a multilingual web application used at GoPro as a reference for
-AI-assisted development patterns. It serves a browser-readable set of static
-greetings and is deliberately self-contained so its development workflow can be
-understood without an external integration.
+Hello World is a multilingual web application. A browser user chooses a language and reads a dynamically translated "Hello, World!" greeting. The application owns its curated language choices and delegates translation text to MyMemory.
 
-## Users and workflows
+## User workflow
 
-### Browser User
-
-A Browser User opens the application and reads its greetings in the browser. The
-application supplies both the presentation and the static data behind it.
-
-### AI Agent
-
-An AI Agent begins with [AGENTS.md](../../AGENTS.md) to orient itself to the
-repository, service-control `hub` commands, API contract, and available skills.
-It uses [Makefile](../../Makefile) targets as the command surface and can follow
-the [dev-loop skill](../../.agents/skills/dev-loop/SKILL.md) to develop,
-observe, and correct a running application.
+A browser user opens the application. The application selects a default from the browser locale, allows the user to choose another supported language, and displays one translated greeting.
 
 ## Diagram
 
 ```mermaid
 flowchart LR
-    subgraph Actors["People and tooling"]
-        BrowserUser["Browser User"]
-        AIAgent["AI Agent"]
-    end
+    User["Browser user"]
+    MyMemory["MyMemory Translation API"]
 
     subgraph System["Hello World App"]
-        App["Multilingual greeting application"]
+        App["Language selection and greeting display"]
     end
 
-    NoExternal["Nothing external\n(no outbound integrations)"]
-
-    BrowserUser -->|views greetings| App
-    AIAgent -->|reads guidance and runs commands| App
-    App -->|calls none| NoExternal
+    User -->|selects language and views greeting| App
+    App -->|requests translation| MyMemory
+    MyMemory -->|returns translated text| App
 ```
 
 ## Boundary
 
-The application serves static greeting data. It does not call external APIs, use
-a database, or persist state. Its only data source is bundled with the
-application and is loaded for serving; there are no external systems beyond the
-system boundary shown above.
+The application stores curated language metadata but does not store translated greeting text. Its backend owns the MyMemory integration, timeout, response validation, and application-facing errors. The browser does not call MyMemory directly.
 
-For the separately running frontend and backend units inside this boundary, see
-[02 Containers](02-containers.md).
+The application does not use a database or persist user state. See [02 Containers](02-containers.md) for the separately running frontend and backend units.
+
+## Related decision
+
+[ADR-0001](../adr/0001-translations-from-external-api.md) records why translation text moved from repository data to an external API.
