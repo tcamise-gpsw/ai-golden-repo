@@ -63,14 +63,6 @@ make test-frontend   # Vitest
 make test-e2e        # Playwright — requires both services running
 ```
 
-## Skills
-
-| Skill | Description |
-| --- | --- |
-| `dev-loop` | Own the start, observe, fix, hot-reload, and targeted-verification loop for this application. |
-| `docs-create-adr` | Write a new Architecture Decision Record, update the index, and cross-link to affected architecture docs. |
-| `docs-absorb-plan` | Fold a shipped plan's durable content into living architecture docs and ADRs; leave the plan as a historical record. |
-
 ## Code comments
 
 **Docstrings and JSDoc on all non-private symbols.** Every public Python function, class, and module carries a docstring. Every exported React component carries a JSDoc block. These feed the generated API reference (`make openapi`, docstrings, JSDoc) and are not optional.
